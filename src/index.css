@@ -8,6 +8,12 @@ body {
   margin: 0 auto;
   width: 600px;
 }
+.wrapper h1{
+color: #636363;
+}
+.wrapper p{
+color: #636363;
+}
 .rm{
   cursor: pointer;
   background-color: #ff9665;
@@ -15,6 +21,10 @@ body {
   border-radius: 3px;
 }
 
-.done{
+.completeNote{
   text-decoration: line-through;
+}
+.completeLi{
+  background: #fdc7ad;
+  transition: 0.5s;
 }

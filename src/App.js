@@ -1,39 +1,51 @@
 import React from "react";
-import TodoList from "./Todo/TodoList";
-import AddTodo from "./Todo/AddTodo";
+import NoteList from "./Note/NoteList";
+import AddNote from "./Note/AddNote";
 import Context from "./context";
 
 function App() {
-  const [todos, setTodos] = React.useState([
-    { id: 1, completed: false, title: "pay bread" },
-    { id: 2, completed: false, title: "pay milk" },
-    { id: 3, completed: false, title: "pay butter" }
+  const [notes, setNotes] = React.useState([
+    // { id: 1, completed: false, title: "pay bread" },
+    // { id: 2, completed: false, title: "pay milk" },
+    // { id: 3, completed: false, title: "pay butter" }
   ]);
 
-  function toggleTodo(id) {
-    setTodos(
-      todos.map(todo => {
-        if (todo.id === id) {
-          todo.completed = !todo.completed;
+  function toggleNote(id) {
+    setNotes(
+      notes.map(note => {
+        if (note.id === id) {
+          note.completed = !note.completed;
         }
-        return todo;
+        return note;
       })
     );
   }
 
-  function removeTodo(id) {
-    setTodos(todos.filter(todo => todo.id !== id));
+  function removeNote(id) {
+    setNotes(notes.filter(note => note.id !== id));
+  }
+
+  function addNote(title) {
+    setNotes(
+      notes.concat([
+        {
+          title,
+          id: Date.now(),
+          completed: false
+        }
+      ])
+    );
   }
 
   return (
-    <Context.Provider value={{ removeTodo }}>
+    <Context.Provider value={{ removeNote }}>
       <div className="wrapper">
-        <h1>React App</h1>
-        <AddTodo />
-        {todos.length ? (
-          <TodoList todos={todos} onToggle={toggleTodo} />
+        <h1>Create your notes</h1>
+        <AddNote onCreate={addNote} />
+        {notes.length ? (
+          <NoteList notes={notes} onToggle={toggleNote} />
         ) : (
-          <p>no todos</p>
+          <p>no notes</p>
         )}
       </div>
     </Context.Provider>

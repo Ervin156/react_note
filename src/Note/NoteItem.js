@@ -18,40 +18,42 @@ const styles = {
   }
 };
 
-function TodoItem({ todo, index, onChange }) {
-  const { removeTodo } = useContext(Context);
-  const classes = [];
-  if (todo.completed) {
-    classes.push("done");
+function NoteItem({ note, index, onChange }) {
+  const { removeNote } = useContext(Context);
+  const classesNote = [];
+  const classesLi = [];
+  if (note.completed) {
+    classesNote.push("completeNote");
+    classesLi.push("completeLi");
   }
 
   return (
-    <li style={styles.li}>
-      <span className={classes.join(" ")}>
+    <li style={styles.li} className={classesLi.join(" ")}>
+      <span className={classesNote.join(" ")}>
         <input
           type="checkbox"
-          //   checked={todo.completed}
+            // checked={note.completed}
           style={styles.input}
           onChange={() => {
-            console.log(todo);
+            console.log(note);
 
-            onChange(todo.id);
+            onChange(note.id);
           }}
         />
         <strong>{index + 1 + "\t"}</strong>
-        {todo.title}
+        {note.title}
       </span>
-      <button className="rm" onClick={()=>{removeTodo(todo.id)}}>
+      <button className="rm" onClick={()=>{removeNote(note.id)}}>
         &times;
       </button>
     </li>
   );
 }
 
-TodoItem.protoType = {
-  todo: ProtoType.object.isRequired,
+NoteItem.protoType = {
+  note: ProtoType.object.isRequired,
   index: ProtoType.number,
   onChange: ProtoType.func.isRequired
 };
 
-export default TodoItem;
+export default NoteItem;
