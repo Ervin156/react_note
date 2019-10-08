@@ -1,7 +1,10 @@
-import React from "react";
+import React, { useEffect } from "react";
 import NoteList from "./Note/NoteList";
-import AddNote from "./Note/AddNote";
 import Context from "./context";
+import Loader from './Loader';
+import Modal from './Modal/Modal';
+
+const AddNote = React.lazy(() => import('./Note/AddNote'))
 
 function App() {
   const [notes, setNotes] = React.useState([
@@ -9,6 +12,18 @@ function App() {
     // { id: 2, completed: false, title: "pay milk" },
     // { id: 3, completed: false, title: "pay butter" }
   ]);
+  const [loading, setLoading] = React.useState(true);
+
+  useEffect(() => {
+    fetch('https://jsonplaceholder.typicode.com/todos?_limit=3')
+      .then(response => response.json())
+      .then(notes => {
+        setTimeout(() => {
+          setNotes(notes);
+          setLoading(false);
+        }, 2000);
+      })
+  }, []);
 
   function toggleNote(id) {
     setNotes(
@@ -17,6 +32,7 @@ function App() {
           note.completed = !note.completed;
         }
         return note;
+
       })
     );
   }
@@ -27,13 +43,7 @@ function App() {
 
   function addNote(title) {
     setNotes(
-      notes.concat([
-        {
-          title,
-          id: Date.now(),
-          completed: false
-        }
-      ])
+      notes.concat([{ title, id: Date.now(), completed: false }])
     );
   }
 
@@ -41,10 +51,15 @@ function App() {
     <Context.Provider value={{ removeNote }}>
       <div className="wrapper">
         <h1>Create your notes</h1>
-        <AddNote onCreate={addNote} />
+        <Modal />
+        <React.Suspense fallback={<Loader />}>
+          <AddNote onCreate={addNote} />
+
+        </React.Suspense>
+        {loading && <Loader />}
         {notes.length ? (
           <NoteList notes={notes} onToggle={toggleNote} />
-        ) : (
+        ) : loading ? null : (
           <p>no notes</p>
         )}
       </div>

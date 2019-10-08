@@ -5,7 +5,6 @@ const styles = {
   input: {
     margin: "16px 16px 16px 0",
     coursor: "pointer",
-    background: "#eae9e9",
     border: "none",
     height: "24px",
     width: "300px"
@@ -18,28 +17,35 @@ const styles = {
   }
 };
 
-function AddNote({ onCreate }) {
-  const [value, setValue] = useState('');
+function useInputValue(defaultValue = '') {
+  const [value, setValue] = useState(defaultValue);
+  return{
+    bind: {
+      value,
+      onChange: event => setValue(event.target.value) 
+    },
+    clear: () => setValue(''),
+    value: () => value
 
+  }
+}
+
+function AddNote({ onCreate }) {
+  const input = useInputValue('');
+  
   function submitHandler(event) {
     event.preventDefault();
     // trim() - удаляет лишние пробелы
-    if (value) {
-      onCreate(value);
-      setValue('');
+    if (input.value().trim()) {
+      onCreate(input.value());
+      input.clear();
     }
   }
 
   return (
     <form onSubmit={submitHandler}>
-      <input
-        style={styles.input}
-        value={value}
-        onChange={event => setValue(event.target.value)}
-      />
-      <button type="submit" style={styles.button}>
-        Add Note
-      </button>
+      <input style={styles.input} {...input.bind}/>
+      <button type="submit" style={styles.button}> Add Note</button>
     </form>
   );
 }

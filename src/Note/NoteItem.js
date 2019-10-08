@@ -22,6 +22,7 @@ function NoteItem({ note, index, onChange }) {
   const { removeNote } = useContext(Context);
   const classesNote = [];
   const classesLi = [];
+
   if (note.completed) {
     classesNote.push("completeNote");
     classesLi.push("completeLi");
@@ -32,7 +33,7 @@ function NoteItem({ note, index, onChange }) {
       <span className={classesNote.join(" ")}>
         <input
           type="checkbox"
-            // checked={note.completed}
+          // checked={note.completed}
           style={styles.input}
           onChange={() => {
             console.log(note);
@@ -43,7 +44,12 @@ function NoteItem({ note, index, onChange }) {
         <strong>{index + 1 + "\t"}</strong>
         {note.title}
       </span>
-      <button className="rm" onClick={()=>{removeNote(note.id)}}>
+      <button
+        className="rm"
+        onClick={() => {
+          removeNote(note.id);
+        }}
+      >
         &times;
       </button>
     </li>
